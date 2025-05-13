@@ -1,0 +1,9 @@
+# requirements.txt for create_course_folders.py
+# No external modules required; uses only Python standard library
+
+watchdog
+pymupdf
+nltk
+spacy
+tqdm
+python-dotenv
