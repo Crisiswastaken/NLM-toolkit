@@ -1,5 +1,5 @@
-# requirements.txt for create_course_folders.py
-# No external modules required; uses only Python standard library
+# requirements.txt for NLM-toolkit
+# Standard library only for basic scripts
 
 watchdog
 pymupdf
@@ -7,3 +7,6 @@ nltk
 spacy
 tqdm
 python-dotenv
+# The following are optional, only needed for advanced features:
+sentence-transformers
+faiss-cpu
