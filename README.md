@@ -34,7 +34,7 @@ A toolkit for organizing, processing, and chunking course materials, especially 
 3. **Configure base directory**
    - Create a `.env` file in the project root with the following content:
      ```env
-     BASE_DIR=C:\Users\vince\OneDrive\Desktop\Private\Programming\Programming Projects\NLM-toolkit\Docs
+     BASE_DIR=<BASE-DOCS-DIRECTORY>
      ```
    - Or edit `config.py` directly to set `BASE_DOCS_DIR`.
 4. **(Optional) Change Summarization Model**

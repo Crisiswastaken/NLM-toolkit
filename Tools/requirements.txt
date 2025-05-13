@@ -10,3 +10,4 @@ python-dotenv
 # The following are optional, only needed for advanced features:
 sentence-transformers
 faiss-cpu
+# Ollama must be installed separately for local LLM summarization (https://ollama.com/)
