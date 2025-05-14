@@ -1,6 +1,6 @@
 # NLM-toolkit
 
-A toolkit for organizing, processing, and chunking course materials, especially PDFs and their extracted text, for efficient study and AI-powered summarization.
+A toolkit for organizing, processing, chunking, summarizing, and exporting course materials (especially PDFs and their extracted text) for efficient study and AI-powered summarization.
 
 ## Features
 - **Course Folder Structure Creation**: Automatically create a standardized folder structure for any course code.
@@ -8,6 +8,7 @@ A toolkit for organizing, processing, and chunking course materials, especially 
 - **PDF Text Extraction**: Extract text from PDFs using PyMuPDF.
 - **Text Cleaning & Chunking**: Clean and split extracted text into sentence-based, overlapping chunks for downstream processing.
 - **AI Summarization**: Generate concise, academic summaries for each chunk using a local Ollama model (model is configurable).
+- **Markdown to PDF Export**: Convert markdown summaries to well-formatted PDFs (no pandoc required).
 - **Configurable**: All base directories, chunking, and summarization parameters are set in `Tools/config.py` (or via `.env`).
 - **Progress Bars**: Uses `tqdm` for progress indication.
 
@@ -15,7 +16,7 @@ A toolkit for organizing, processing, and chunking course materials, especially 
 ```
 <course-code>/
     <course-code>_notes/         # Place your PDF notes here
-    <course-code>_ai_summaries/  # Combined summaries for each file
+    <course-code>_ai_summaries/  # Combined summaries and exported PDFs
     <course-code>_exp_ques/
     <course-code>_md/            # Markdown summaries for each chunk
     <course-code>_html/
@@ -34,7 +35,7 @@ A toolkit for organizing, processing, and chunking course materials, especially 
 3. **Configure base directory**
    - Create a `.env` file in the project root with the following content:
      ```env
-     BASE_DIR=<BASE-DOCS-DIRECTORY>
+     BASE_DIR=<BASE DOCS DIRECTORY>
      ```
    - Or edit `config.py` directly to set `BASE_DOCS_DIR`.
 4. **(Optional) Change Summarization Model**
@@ -74,7 +75,21 @@ Run:
 ```cmd
 python summarize_chunks_with_ollama.py
 ```
-Enter your course code. Summaries for each chunk will be saved in `<course-code>_md/`, and combined summaries in `<course-code>_ai_summaries/`.
+Enter your course code. Summaries for each chunk will be saved in `<course-code>_md/`.
+
+### 6. Combine Markdown Summaries
+Run:
+```cmd
+python combine_md_summaries.py
+```
+Enter your course code. Combined summaries for each file will be saved in the corresponding subfolder of `<course-code>_md/`.
+
+### 7. Export Markdown Summaries to PDF
+Run:
+```cmd
+python md_to_pdf.py
+```
+Enter your course code. PDFs will be saved in `<course-code>_ai_summaries/`.
 
 ## Chunking & Summarization Configuration
 - Chunk size, overlap, and format are set in `config.py`.
@@ -85,11 +100,13 @@ Enter your course code. Summaries for each chunk will be saved in `<course-code>
 - Python 3.8+
 - See `Tools/requirements.txt` for all Python dependencies.
 - Ollama must be installed and running locally for summarization.
+- For PDF export, WeasyPrint and its dependencies must be installed (see https://weasyprint.org/ for platform-specific requirements).
 
 ## Notes
 - For sentence-based chunking, NLTK's `punkt` tokenizer is used. The script will auto-download it if missing.
 - If you use a virtual environment, activate it before installing requirements.
 - Summarization model can be changed in `config.py` without modifying the main script.
+- Markdown to PDF conversion uses WeasyPrint and a GitHub-like CSS for formatting.
 
 ## License
 See `LICENSE` file.

@@ -41,17 +41,11 @@ def process_chunks(course_code, chunk_dir, md_dir, summary_dir):
         if summary is None:
             logging.error(f"Failed to summarize {chunk_file}")
             continue
-        summary_filename = f"summary_{os.path.splitext(os.path.basename(chunk_file))[0]}.txt"
+        summary_filename = f"summary_{os.path.splitext(os.path.basename(chunk_file))[0]}.md"
         summary_path = os.path.join(md_dir, summary_filename)
         with open(summary_path, 'w', encoding='utf-8') as sf:
             sf.write(summary)
         summaries.append(summary)
-    # Combine all summaries
-    if summaries:
-        combined_path = os.path.join(summary_dir, f"summary_{os.path.basename(chunk_dir)}_combined.txt")
-        with open(combined_path, 'w', encoding='utf-8') as cf:
-            cf.write('\n\n'.join(summaries))
-        logging.info(f"Combined summary written to {combined_path}")
     return len(chunk_files), len(summaries)
 
 def main():

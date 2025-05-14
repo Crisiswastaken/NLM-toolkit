@@ -7,6 +7,8 @@ nltk
 spacy
 tqdm
 python-dotenv
+markdown
+weasyprint
 # The following are optional, only needed for advanced features:
 sentence-transformers
 faiss-cpu

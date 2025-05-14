@@ -21,5 +21,6 @@ SUMMARIZATION_MODEL = "llama3"  # Model name for summarization (used by Ollama)
 SUMMARIZATION_PROMPT = """
 Summarize the following course content in a concise, clear, and academically rigorous manner. Ensure the summary includes all key concepts, while reducing the length to approximately one-third of the original text. The output should be highly informative and maintain a logical flow, covering the essential points effectively.
 Use clean, attractive, and concise markdown formatting to organize the summary. Emphasize clarity and brevity, focusing on the most important aspects and omitting extraneous details. The tone should be professional and appropriate for academic use.
+Do not include any additional comments or explanations outside of the markdown formatting.
 ---"""
 
