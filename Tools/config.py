@@ -19,8 +19,29 @@ CHUNK_TOKENIZER = "tiktoken"  # or 'llama-cpp-python'
 # Summarization Configuration
 SUMMARIZATION_MODEL = "llama3"  # Model name for summarization (used by Ollama)
 SUMMARIZATION_PROMPT = """
-Summarize the following course content in a concise, clear, and academically rigorous manner. Ensure the summary includes all key concepts, while reducing the length to approximately one-third of the original text. The output should be highly informative and maintain a logical flow, covering the essential points effectively.
-Use clean, attractive, and concise markdown formatting to organize the summary. Emphasize clarity and brevity, focusing on the most important aspects and omitting extraneous details. The tone should be professional and appropriate for academic use.
-Do not include any additional comments or explanations outside of the markdown formatting.
+Summarize the following course content in a concise and academically rigorous way.
+
+- Reduce the length to roughly one-third of the original.
+- Include all essential concepts with clear, logical structure.
+- Use clean, minimal markdown formatting.
+- Focus on clarity, brevity, and information density.
+- Omit any commentary, explanations, or output outside the markdown.
+
+The tone must remain professional and academic.
 ---"""
 
+
+# Expected Q&A Configuration
+EXPECTED_QA_MODEL = "llama3"  # Model name for expected Q&A generation (used by Ollama)
+
+EXPECTED_QA_PROMPT = '''\
+From the content below, generate the most likely exam and viva questions.  
+For each question, include a concise, accurate answer.  
+Format in clean Markdown:  
+### Qn. [Question]  
+[Answer]
+
+Do not add any intro, summary, or extra comments.
+
+---
+''' 

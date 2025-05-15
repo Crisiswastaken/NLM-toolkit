@@ -17,7 +17,7 @@ A toolkit for organizing, processing, chunking, summarizing, and exporting cours
 <course-code>/
     <course-code>_notes/         # Place your PDF notes here
     <course-code>_ai_summaries/  # Combined summaries and exported PDFs
-    <course-code>_exp_ques/
+    <course-code>_exp_ques/      # Exported expected Q&A PDFs
     <course-code>_md/            # Markdown summaries for each chunk
     <course-code>_html/
     <course-code>_pyqs/
@@ -25,85 +25,57 @@ A toolkit for organizing, processing, chunking, summarizing, and exporting cours
     <course-code>_chunks/        # Cleaned and chunked text files
 ```
 
-## Setup
-1. **Clone the repository**
-2. **Install dependencies**
-   - Open a terminal in the `Tools/` directory and run:
-     ```cmd
-     pip install -r requirements.txt
-     ```
-3. **Configure base directory**
-   - Create a `.env` file in the project root with the following content:
-     ```env
-     BASE_DIR=<BASE DOCS DIRECTORY>
-     ```
-   - Or edit `config.py` directly to set `BASE_DOCS_DIR`.
-4. **(Optional) Change Summarization Model**
-   - In `Tools/config.py`, set `SUMMARIZATION_MODEL` to your preferred Ollama model (e.g., `llama3`, `mistral`, etc.).
+## Quickstart Workflow
+1. **Create Course Folder Structure**
+   ```cmd
+   python create_course_folders.py
+   ```
+   Enter your course code (e.g., `ACP`).
+2. **Detect and Monitor PDFs**
+   ```cmd
+   python find_pdfs_in_notes.py
+   ```
+   Enter your course code. Optionally, watch for new PDFs in real time.
+3. **Extract Text from PDFs**
+   ```cmd
+   python extract_pdf_text.py
+   ```
+   Enter your course code. Extracted text files will be saved in `<course-code>_text/`.
+4. **Clean and Chunk Text Files**
+   ```cmd
+   python clean_and_chunk_texts.py
+   ```
+   Enter your course code. Cleaned and chunked files will be saved in `<course-code>_chunks/`.
+5. **Summarize Chunks with Ollama**
+   ```cmd
+   python summarize_chunks_with_ollama.py
+   ```
+   Enter your course code. Summaries for each chunk will be saved in `<course-code>_md/`.
+6. **Combine Markdown Summaries**
+   ```cmd
+   python combine_md_files.py
+   ```
+   Enter your course code. Combined summaries for each file will be saved in the corresponding subfolder of `<course-code>_md/`.
+7. **Export Markdown Summaries to PDF**
+   ```cmd
+   python md_to_pdf.py
+   ```
+   Enter your course code. PDFs will be saved in `<course-code>_ai_summaries/` and `<course-code>_exp_ques/`.
 
-## Usage
-### 1. Create Course Folder Structure
-Run:
-```cmd
-python create_course_folders.py
-```
-Enter your course code (e.g., `ACP`).
-
-### 2. Detect and Monitor PDFs
-Run:
-```cmd
-python find_pdfs_in_notes.py
-```
-Enter your course code. Optionally, watch for new PDFs in real time.
-
-### 3. Extract Text from PDFs
-Run:
-```cmd
-python extract_pdf_text.py
-```
-Enter your course code. Extracted text files will be saved in `<course-code>_text/`.
-
-### 4. Clean and Chunk Text Files
-Run:
-```cmd
-python clean_and_chunk_texts.py
-```
-Enter your course code. Cleaned and chunked files will be saved in `<course-code>_chunks/`.
-
-### 5. Summarize Chunks with Ollama
-Run:
-```cmd
-python summarize_chunks_with_ollama.py
-```
-Enter your course code. Summaries for each chunk will be saved in `<course-code>_md/`.
-
-### 6. Combine Markdown Summaries
-Run:
-```cmd
-python combine_md_summaries.py
-```
-Enter your course code. Combined summaries for each file will be saved in the corresponding subfolder of `<course-code>_md/`.
-
-### 7. Export Markdown Summaries to PDF
-Run:
-```cmd
-python md_to_pdf.py
-```
-Enter your course code. PDFs will be saved in `<course-code>_ai_summaries/`.
-
-## Chunking & Summarization Configuration
-- Chunk size, overlap, and format are set in `config.py`.
-- Summarization prompt and model are also set in `config.py`.
+## Configuration
+- Chunk size, overlap, and format are set in `Tools/config.py`.
+- Summarization prompt and model are also set in `Tools/config.py`.
 - Default: 1200 words per chunk, 200 words overlap, sentence-based splitting, and `llama3` model for summarization.
+- You can also set `BASE_DIR` in a `.env` file in the project root.
 
 ## Requirements
 - Python 3.8+
 - See `Tools/requirements.txt` for all Python dependencies.
-- Ollama must be installed and running locally for summarization.
+- Ollama must be installed and running locally for summarization (https://ollama.com/).
 - For PDF export, WeasyPrint and its dependencies must be installed (see https://weasyprint.org/ for platform-specific requirements).
+- NLTK's `punkt` tokenizer is used for sentence splitting (auto-downloaded if missing).
 
 ## Notes
-- For sentence-based chunking, NLTK's `punkt` tokenizer is used. The script will auto-download it if missing.
 - If you use a virtual environment, activate it before installing requirements.
 - Summarization model can be changed in `config.py` without modifying the main script.
 - Markdown to PDF conversion uses WeasyPrint and a GitHub-like CSS for formatting.

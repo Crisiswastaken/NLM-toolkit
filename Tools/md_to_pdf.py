@@ -6,17 +6,25 @@ from tqdm import tqdm
 
 def convert_md_to_pdf(course_code):
     md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md")
-    pdf_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_ai_summaries")
-    os.makedirs(pdf_base, exist_ok=True)
+    exp_ques_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_exp_ques")
+    ai_summaries_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_ai_summaries")
+    os.makedirs(exp_ques_base, exist_ok=True)
+    os.makedirs(ai_summaries_base, exist_ok=True)
     for subfolder in os.listdir(md_base):
         subfolder_path = os.path.join(md_base, subfolder)
         if not os.path.isdir(subfolder_path):
             continue
         for fname in os.listdir(subfolder_path):
-            if fname.startswith("summary_") and fname.endswith("_combined.md"):
+            if fname.endswith("_combined.md"):
                 md_path = os.path.join(subfolder_path, fname)
+                if fname.startswith("qa_"):
+                    output_base = exp_ques_base
+                elif fname.startswith("summary_"):
+                    output_base = ai_summaries_base
+                else:
+                    continue  # skip files that don't match either prefix
                 pdf_name = fname.replace(".md", ".pdf")
-                pdf_path = os.path.join(pdf_base, pdf_name)
+                pdf_path = os.path.join(output_base, pdf_name)
                 try:
                     with open(md_path, 'r', encoding='utf-8') as f:
                         md_content = f.read()
