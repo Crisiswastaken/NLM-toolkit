@@ -45,3 +45,25 @@ Do not add any intro, summary, or extra comments.
 
 ---
 ''' 
+
+
+# Quiz Generation Configuration
+QUIZ_MODEL = "llama3"  # Model name for quiz generation (used by Ollama)
+QUIZ_PROMPT = """
+Generate as many multiple choice questions as possible from the text below.
+Format strictly as follows:
+
+1. [Question text]
+A) [Option A]
+B) [Option B]
+C) [Option C]
+D) [Option D]
+Answer: [A/B/C/D]
+- Each question must be a single sentence or a short paragraph.
+- Each question must have exactly four options (A, B, C, D).
+- Only one correct answer per question, marked as 'Answer: X' on a new line after the options.
+- Do not include explanations, extra comments, or any text outside this format.
+- Do not repeat the question text in the answer line.
+- Do not add any intro or summary.
+Text:
+"""

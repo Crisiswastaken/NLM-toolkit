@@ -8,7 +8,10 @@ A toolkit for organizing, processing, chunking, summarizing, and exporting cours
 - **PDF Text Extraction**: Extract text from PDFs using PyMuPDF.
 - **Text Cleaning & Chunking**: Clean and split extracted text into sentence-based, overlapping chunks for downstream processing.
 - **AI Summarization**: Generate concise, academic summaries for each chunk using a local Ollama model (model is configurable).
-- **Markdown to PDF Export**: Convert markdown summaries to well-formatted PDFs (no pandoc required).
+- **Expected Q&A Generation**: Automatically generate likely exam/viva questions and answers from content chunks using Ollama.
+- **Quiz Generation**: Create multiple-choice quizzes from content chunks using Ollama.
+- **Terminal Quiz Runner**: Practice generated quizzes interactively in your terminal.
+- **Markdown to PDF Export**: Convert markdown summaries and Q&A to well-formatted PDFs (no pandoc required).
 - **Configurable**: All base directories, chunking, and summarization parameters are set in `Tools/config.py` (or via `.env`).
 - **Progress Bars**: Uses `tqdm` for progress indication.
 
@@ -18,9 +21,10 @@ A toolkit for organizing, processing, chunking, summarizing, and exporting cours
     <course-code>_notes/         # Place your PDF notes here
     <course-code>_ai_summaries/  # Combined summaries and exported PDFs
     <course-code>_exp_ques/      # Exported expected Q&A PDFs
-    <course-code>_md/            # Markdown summaries for each chunk
+    <course-code>_md/            # Markdown summaries and Q&A for each chunk
     <course-code>_html/
     <course-code>_pyqs/
+    <course-code>_quizzes/       # Generated quizzes (MCQs) for each file
     <course-code>_text/          # Extracted text files from PDFs
     <course-code>_chunks/        # Cleaned and chunked text files
 ```
@@ -51,34 +55,50 @@ A toolkit for organizing, processing, chunking, summarizing, and exporting cours
    python summarize_chunks_with_ollama.py
    ```
    Enter your course code. Summaries for each chunk will be saved in `<course-code>_md/`.
-6. **Combine Markdown Summaries**
+6. **Generate Expected Q&A**
+   ```cmd
+   python generate_expected_qa_with_ollama.py
+   ```
+   Enter your course code. Q&A markdown files will be saved in `<course-code>_md/` and exported PDFs in `<course-code>_exp_ques/`.
+7. **Generate Quizzes (MCQs)**
+   ```cmd
+   python generate_quizzes_with_ollama.py
+   ```
+   Enter your course code. Quiz markdown files will be saved in `<course-code>_quizzes/`.
+8. **Combine Markdown Summaries**
    ```cmd
    python combine_md_files.py
    ```
    Enter your course code. Combined summaries for each file will be saved in the corresponding subfolder of `<course-code>_md/`.
-7. **Export Markdown Summaries to PDF**
+9. **Export Markdown Summaries and Q&A to PDF**
    ```cmd
    python md_to_pdf.py
    ```
    Enter your course code. PDFs will be saved in `<course-code>_ai_summaries/` and `<course-code>_exp_ques/`.
+10. **Practice Quizzes in Terminal**
+    ```cmd
+    python terminal_quiz_runner.py
+    ```
+    Enter your course code and the original file name to practice MCQs interactively in your terminal.
 
 ## Configuration
 - Chunk size, overlap, and format are set in `Tools/config.py`.
-- Summarization prompt and model are also set in `Tools/config.py`.
-- Default: 1200 words per chunk, 200 words overlap, sentence-based splitting, and `llama3` model for summarization.
+- Summarization, Q&A, and quiz prompts and models are also set in `Tools/config.py`.
+- Default: 1200 words per chunk, 200 words overlap, sentence-based splitting, and `llama3` model for summarization, Q&A, and quizzes.
 - You can also set `BASE_DIR` in a `.env` file in the project root.
 
 ## Requirements
 - Python 3.8+
 - See `Tools/requirements.txt` for all Python dependencies.
-- Ollama must be installed and running locally for summarization (https://ollama.com/).
+- Ollama must be installed and running locally for summarization, Q&A, and quiz generation (https://ollama.com/).
 - For PDF export, WeasyPrint and its dependencies must be installed (see https://weasyprint.org/ for platform-specific requirements).
 - NLTK's `punkt` tokenizer is used for sentence splitting (auto-downloaded if missing).
 
 ## Notes
 - If you use a virtual environment, activate it before installing requirements.
-- Summarization model can be changed in `config.py` without modifying the main script.
+- All model and prompt settings can be changed in `config.py` without modifying the main scripts.
 - Markdown to PDF conversion uses WeasyPrint and a GitHub-like CSS for formatting.
+- Quizzes are generated in markdown and can be practiced interactively in the terminal.
 
 ## License
 See `LICENSE` file.
