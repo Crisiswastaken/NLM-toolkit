@@ -13,3 +13,4 @@ weasyprint
 sentence-transformers
 faiss-cpu
 # Ollama must be installed separately for local LLM summarization (https://ollama.com/)
+gradio
