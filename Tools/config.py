@@ -66,4 +66,13 @@ Answer: [A/B/C/D]
 - Do not repeat the question text in the answer line.
 - Do not add any intro or summary.
 Text:
+
+"""
+
+# Recommendation prompt for quiz recommender
+RECOMMENDATION_MODEL = "llama3"  # Model name for recommendation generation (used by Ollama)
+RECOMMEND_PROMPT = """
+You are an expert tutor. The following are questions a user got wrong in a quiz, with their answers and the correct answers. For each question, suggest what topics, concepts, or skills the user should study or practice to improve. Be concise and actionable. List recommendations as bullet points.
+
+{wrong_answers}
 """
