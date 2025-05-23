@@ -32,5 +32,9 @@ def combine_md_summaries(course_code):
                 print(f"No .md files found to combine for base '{base}' in {subfolder_path}")
 
 if __name__ == "__main__":
-    course_code = input("Enter course code: ").strip()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+    else:
+        course_code = input("Enter course code: ").strip()
     combine_md_summaries(course_code)

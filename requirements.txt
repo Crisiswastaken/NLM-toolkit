@@ -9,8 +9,9 @@ tqdm
 python-dotenv
 markdown
 weasyprint
-# The following are optional, only needed for advanced features:
+chromadb
 sentence-transformers
+# The following are optional, only needed for advanced features:
 faiss-cpu
 # Ollama must be installed separately for local LLM summarization (https://ollama.com/)
 gradio

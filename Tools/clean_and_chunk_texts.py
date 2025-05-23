@@ -70,5 +70,9 @@ def process_text_files(course_code):
     print(f"\nSummary: {len(txt_files)} files processed, {total_chunks} chunks created.")
 
 if __name__ == "__main__":
-    course_code = input("Enter course code: ").strip()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+    else:
+        course_code = input("Enter course code: ").strip()
     process_text_files(course_code)

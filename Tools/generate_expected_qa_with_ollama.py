@@ -45,9 +45,10 @@ def process_chunks_for_qa(course_code, chunk_dir, qa_dir):
             sf.write(qa)
     return len(chunk_files)
 
-def main():
+def main(course_code=None):
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    course_code = input("Enter course code: ").strip()
+    if course_code is None:
+        course_code = input("Enter course code: ").strip()
     chunks_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_chunks")
     if not os.path.exists(chunks_base):
         print(f"Chunks directory does not exist: {chunks_base}")
@@ -64,4 +65,9 @@ def main():
     logging.info(f"\nAll done. {total_files} files processed, {total_chunks} Q&A files generated.")
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+        main(course_code)
+    else:
+        main()

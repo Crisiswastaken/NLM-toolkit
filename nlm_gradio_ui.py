@@ -2,6 +2,9 @@ import gradio as gr
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'Tools'))
+from agent_core import AgentCore
+
+agent = AgentCore()
 
 def create_folders_ui(course_code):
     try:

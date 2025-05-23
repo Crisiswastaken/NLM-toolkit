@@ -18,5 +18,9 @@ def create_course_folders(course_code):
     print(f"Folders created for course: {course_code} in Docs directory")
 
 if __name__ == "__main__":
-    course_code = input("Enter course code: ").strip()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+    else:
+        course_code = input("Enter course code: ").strip()
     create_course_folders(course_code)

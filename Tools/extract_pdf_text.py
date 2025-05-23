@@ -29,5 +29,9 @@ def extract_text_from_pdfs(course_code):
             print(f"Failed to extract {pdf_file}: {e}")
 
 if __name__ == "__main__":
-    course_code = input("Enter course code: ").strip()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+    else:
+        course_code = input("Enter course code: ").strip()
     extract_text_from_pdfs(course_code)

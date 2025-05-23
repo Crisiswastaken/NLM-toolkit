@@ -48,9 +48,10 @@ def process_chunks(course_code, chunk_dir, md_dir, summary_dir):
         summaries.append(summary)
     return len(chunk_files), len(summaries)
 
-def main():
+def main(course_code=None):
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    course_code = input("Enter course code: ").strip()
+    if course_code is None:
+        course_code = input("Enter course code: ").strip()
     chunks_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_chunks")
     md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md")
     summary_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_ai_summaries")
@@ -69,4 +70,9 @@ def main():
     logging.info(f"\nAll done. {total_files} files processed, {total_chunks} chunk summaries generated.")
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) > 1:
+        course_code = sys.argv[1].strip()
+        main(course_code)
+    else:
+        main()
