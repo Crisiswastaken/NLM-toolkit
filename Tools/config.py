@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 BASE_DOCS_DIR = os.getenv("BASE_DIR")
 
+#============================================LOCAL LLM CONFIGURATION========================================
+# Ollama configuration for local LLMs
+
 # Chunking Configuration
 CHUNK_SIZE_WORDS = 1200  # 1200–1500 words
 CHUNK_SIZE_CHARS = 4500  # ~4500–6000 chars
@@ -76,3 +79,8 @@ You are an expert tutor. The following are questions a user got wrong in a quiz,
 
 {wrong_answers}
 """
+
+
+#============================================ONLINE MLLM CONFIGURATION========================================
+
+

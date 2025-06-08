@@ -1,5 +1,5 @@
 import os
-from config import BASE_DOCS_DIR
+from Tools.config import BASE_DOCS_DIR
 
 def create_course_folders(course_code):
     base_dir = os.path.join(BASE_DOCS_DIR, course_code)

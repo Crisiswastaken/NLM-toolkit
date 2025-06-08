@@ -1,5 +1,5 @@
 import os
-from config import BASE_DOCS_DIR
+from Tools.config import BASE_DOCS_DIR
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time

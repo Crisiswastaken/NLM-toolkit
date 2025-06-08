@@ -1,14 +1,16 @@
 import gradio as gr
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), 'Tools'))
-from agent_core import AgentCore
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../general_tools')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../local_llm')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+from agent.agent_core import AgentCore
 
 agent = AgentCore()
 
 def create_folders_ui(course_code):
     try:
-        from Tools import create_course_folders
+        from general_tools import create_course_folders
         create_course_folders.create_course_folders(course_code)
         return f"Folders created for {course_code}."
     except Exception as e:
@@ -16,7 +18,7 @@ def create_folders_ui(course_code):
 
 def extract_pdf_ui(course_code):
     try:
-        from Tools import extract_pdf_text
+        from local_llm import extract_pdf_text
         extract_pdf_text.extract_text_from_pdfs(course_code)
         return f"PDF text extracted for {course_code}."
     except Exception as e:
@@ -24,7 +26,7 @@ def extract_pdf_ui(course_code):
 
 def clean_chunk_ui(course_code):
     try:
-        from Tools import clean_and_chunk_texts
+        from general_tools import clean_and_chunk_texts
         clean_and_chunk_texts.process_text_files(course_code)
         return f"Text cleaned and chunked for {course_code}."
     except Exception as e:
@@ -32,7 +34,7 @@ def clean_chunk_ui(course_code):
 
 def summarize_ui(course_code):
     try:
-        from Tools import summarize_chunks_with_ollama
+        from local_llm import summarize_chunks_with_ollama
         summarize_chunks_with_ollama.main(course_code)
         return f"Summaries generated for {course_code}."
     except Exception as e:
@@ -40,7 +42,7 @@ def summarize_ui(course_code):
 
 def qa_ui(course_code):
     try:
-        from Tools import generate_expected_qa_with_ollama
+        from local_llm import generate_expected_qa_with_ollama
         generate_expected_qa_with_ollama.main(course_code)
         return f"Expected Q&A generated for {course_code}."
     except Exception as e:
@@ -48,7 +50,7 @@ def qa_ui(course_code):
 
 def quiz_ui(course_code):
     try:
-        from Tools import generate_quizzes_with_ollama
+        from local_llm import generate_quizzes_with_ollama
         generate_quizzes_with_ollama.main(course_code)
         return f"Quizzes generated for {course_code}."
     except Exception as e:
@@ -56,7 +58,7 @@ def quiz_ui(course_code):
 
 def combine_md_ui(course_code):
     try:
-        from Tools import combine_md_files
+        from general_tools import combine_md_files
         combine_md_files.combine_md_summaries(course_code)
         return f"Markdown files combined for {course_code}."
     except Exception as e:
@@ -64,7 +66,7 @@ def combine_md_ui(course_code):
 
 def md_to_pdf_ui(course_code):
     try:
-        from Tools import md_to_pdf
+        from general_tools import md_to_pdf
         md_to_pdf.convert_md_to_pdf(course_code)
         return f"PDFs exported for {course_code}."
     except Exception as e:

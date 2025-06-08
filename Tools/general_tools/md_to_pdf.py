@@ -1,7 +1,7 @@
 import os
 import markdown
 from weasyprint import HTML
-from config import BASE_DOCS_DIR
+from Tools.config import BASE_DOCS_DIR
 from tqdm import tqdm
 
 def convert_md_to_pdf(course_code):
