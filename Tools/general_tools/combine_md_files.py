@@ -1,6 +1,8 @@
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import BASE_DOCS_DIR
 import re
-from Tools.config import BASE_DOCS_DIR
 
 def combine_md_summaries(course_code):
     md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md")

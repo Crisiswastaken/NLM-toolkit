@@ -1,8 +1,10 @@
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import subprocess
 from tqdm import tqdm
 import logging
-from config import BASE_DOCS_DIR, SUMMARIZATION_PROMPT, SUMMARIZATION_MODEL
+from config import BASE_DOCS_DIR, SUMMARIZATION_PROMPT, LOCAL_SUMMARIZATION_MODEL
 
 
 def summarize_chunk(chunk_text):
@@ -14,7 +16,7 @@ def summarize_chunk(chunk_text):
 """
     try:
         result = subprocess.run(
-            ["ollama", "run", SUMMARIZATION_MODEL],
+            ["ollama", "run", LOCAL_SUMMARIZATION_MODEL],
             input=prompt.encode('utf-8'),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

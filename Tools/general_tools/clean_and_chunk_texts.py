@@ -1,6 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 import os
 import re
-from Tools.config import BASE_DOCS_DIR, CHUNK_SIZE_WORDS, CHUNK_OVERLAP_WORDS
+from config import BASE_DOCS_DIR, CHUNK_SIZE_WORDS, CHUNK_OVERLAP_WORDS
 from tqdm import tqdm
 import nltk
 nltk.download('punkt_tab', quiet=True)

@@ -1,35 +1,33 @@
 import os
-import subprocess
+import requests
 from tqdm import tqdm
 import logging
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import BASE_DOCS_DIR, LOCAL_EXPECTED_QA_MODEL, EXPECTED_QA_PROMPT
+from config import BASE_DOCS_DIR, EXPECTED_QA_PROMPT, ONLINE_EXPECTED_QA_MODEL
 
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GEMINI_API_URL = f'https://generativelanguage.googleapis.com/v1beta/{ONLINE_EXPECTED_QA_MODEL}:generateContent'
 
 def generate_expected_qa(chunk_text):
     prompt = f"""{EXPECTED_QA_PROMPT}\n{chunk_text}\n\n### Questions and Answers:\n"""
+    headers = {'Content-Type': 'application/json'}
+    params = {'key': GEMINI_API_KEY}
+    data = {
+        "contents": [{"parts": [{"text": prompt}]}]
+    }
     try:
-        result = subprocess.run(
-            ["ollama", "run", LOCAL_EXPECTED_QA_MODEL],
-            input=prompt.encode('utf-8'),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=120
-        )
-        if result.returncode != 0:
-            logging.error(f"Ollama error: {result.stderr.decode('utf-8')}")
-            return None
-        return result.stdout.decode('utf-8').strip()
+        response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=data, timeout=120)
+        response.raise_for_status()
+        result = response.json()
+        return result['candidates'][0]['content']['parts'][0]['text'].strip()
     except Exception as e:
-        logging.error(f"Subprocess error: {e}")
+        logging.error(f"Gemini API error: {e}")
         return None
 
 def process_chunks_for_qa(course_code, chunk_dir, qa_dir):
     chunk_files = [f for f in os.listdir(chunk_dir) if f.lower().endswith('.txt')]
     chunk_files.sort()
-    # Store Q&A files in the <BASE DIR>/<course code>/<course code>_md/<original file name> directory
-    # Extract the original file name (subfolder name)
     original_file_name = os.path.basename(chunk_dir)
     md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md", original_file_name)
     os.makedirs(md_base, exist_ok=True)

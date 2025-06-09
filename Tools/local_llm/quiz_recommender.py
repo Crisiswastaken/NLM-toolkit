@@ -1,5 +1,7 @@
 import os
 import subprocess
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import RECOMMEND_PROMPT, RECOMMENDATION_MODEL  # Use the same model as summarization, or set a new one if needed
 
 def get_recommendations_from_llm(wrong_answers_file):

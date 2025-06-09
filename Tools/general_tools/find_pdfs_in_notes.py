@@ -1,5 +1,7 @@
 import os
-from Tools.config import BASE_DOCS_DIR
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import BASE_DOCS_DIR
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time

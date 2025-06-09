@@ -1,36 +1,36 @@
 import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import requests
 from tqdm import tqdm
 import logging
-from config import BASE_DOCS_DIR, LOCAL_QUIZ_MODEL, QUIZ_PROMPT
-OLLAMA_API_URL = os.getenv('OLLAMA_API_URL', 'http://localhost:11434/api/generate')
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import BASE_DOCS_DIR, QUIZ_PROMPT, ONLINE_QUIZ_MODEL
 
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GEMINI_API_URL = f'https://generativelanguage.googleapis.com/v1beta/{ONLINE_QUIZ_MODEL}:generateContent'
 
 def generate_quiz(chunk_text):
-    prompt = f"{QUIZ_PROMPT}\n{chunk_text}\n\n### Quiz:\n"
+    prompt = f"""{QUIZ_PROMPT}\n{chunk_text}\n\n### Quiz:\n"""
+    headers = {'Content-Type': 'application/json'}
+    params = {'key': GEMINI_API_KEY}
+    data = {
+        "contents": [{"parts": [{"text": prompt}]}]
+    }
     try:
-        payload = {
-            "model": LOCAL_QUIZ_MODEL,
-            "prompt": prompt,
-            "stream": False
-        }
-        response = requests.post(OLLAMA_API_URL, json=payload)
+        response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=data, timeout=120)
         response.raise_for_status()
-        return response.json().get('response', '').strip()
+        result = response.json()
+        return result['candidates'][0]['content']['parts'][0]['text'].strip()
     except Exception as e:
-        logging.error(f"Ollama API error: {e}")
+        logging.error(f"Gemini API error: {e}")
         return None
 
-
-def process_chunks_for_quiz(course_code, chunk_dir):
+def process_chunks_for_quiz(course_code, chunk_dir, quiz_dir):
     chunk_files = [f for f in os.listdir(chunk_dir) if f.lower().endswith('.txt')]
     chunk_files.sort()
-    # Store quiz files in the <BASE DIR>/<course code>/<course code>_quizzes/<original file name> directory
     original_file_name = os.path.basename(chunk_dir)
-    quiz_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_quizzes", original_file_name)
-    os.makedirs(quiz_base, exist_ok=True)
+    md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md", original_file_name)
+    os.makedirs(md_base, exist_ok=True)
     for idx, chunk_file in enumerate(tqdm(chunk_files, desc=f"Quiz for {original_file_name}"), 1):
         chunk_path = os.path.join(chunk_dir, chunk_file)
         with open(chunk_path, 'r', encoding='utf-8') as cf:
@@ -40,11 +40,10 @@ def process_chunks_for_quiz(course_code, chunk_dir):
             logging.error(f"Failed to generate quiz for {chunk_file}")
             continue
         quiz_filename = f"quiz_{os.path.splitext(os.path.basename(chunk_file))[0]}.md"
-        quiz_path = os.path.join(quiz_base, quiz_filename)
+        quiz_path = os.path.join(md_base, quiz_filename)
         with open(quiz_path, 'w', encoding='utf-8') as sf:
             sf.write(quiz)
     return len(chunk_files)
-
 
 def main(course_code=None):
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -59,12 +58,11 @@ def main(course_code=None):
     total_chunks = 0
     for chunked_file in chunked_files:
         chunk_dir = os.path.join(chunks_base, chunked_file)
-        num_chunks = process_chunks_for_quiz(course_code, chunk_dir)
+        num_chunks = process_chunks_for_quiz(course_code, chunk_dir, chunk_dir)
         total_files += 1
         total_chunks += num_chunks
-        logging.info(f"{chunked_file}: Quiz generated for {num_chunks} chunks.")
-    logging.info(f"\nAll done. {total_files} files processed, {total_chunks} quiz files generated.")
-
+        logging.info(f"{chunked_file}: Quizzes generated for {num_chunks} chunks.")
+    logging.info(f"\nAll done. {total_files} files processed, {total_chunks} quizzes generated.")
 
 if __name__ == "__main__":
     import sys

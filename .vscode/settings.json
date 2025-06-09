@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "./Tools/general_tools",
+        "./Tools/agent",
+        "./Tools/user_obs",
+        "./Tools/local_llm"
+    ]
+}

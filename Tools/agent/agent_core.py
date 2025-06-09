@@ -1,6 +1,9 @@
 import subprocess
 import json
 import logging
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agent_memory import AgentMemory
 
 # Set up logging

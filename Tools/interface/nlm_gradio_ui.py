@@ -1,9 +1,7 @@
 import gradio as gr
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../general_tools')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../local_llm')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agent.agent_core import AgentCore
 
 agent = AgentCore()
