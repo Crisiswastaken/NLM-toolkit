@@ -52,9 +52,8 @@ Do not add any intro, summary, or extra comments.
 LOCAL_QUIZ_MODEL = "llama3"  # Model name for quiz generation (Ollama)
 ONLINE_QUIZ_MODEL = "models/gemini-2.0-flash"  # Model name for online quiz generation (Gemini)
 QUIZ_PROMPT = """
-Generate as many multiple choice questions as possible from the text below.
+Generate 10 questions from the text below.
 Format strictly as follows:
-
 1. [Question text]
 A) [Option A]
 B) [Option B]
@@ -72,7 +71,7 @@ Text:
 """
 
 # Recommendation prompt for quiz recommender
-RECOMMENDATION_MODEL = "llama3"  # Model name for recommendation generation (Ollama)
+RECOMMENDATION_MODEL = "models/gemini-2.0-flash"  # Model name for recommendation generation (Ollama)
 RECOMMEND_PROMPT = """
 You are an expert tutor. The following are questions a user got wrong in a quiz, with their answers and the correct answers. For each question, suggest what topics, concepts, or skills the user should study or practice to improve. Be concise and actionable. List recommendations as bullet points.
 

@@ -1,13 +1,18 @@
 import os
+import sys
 import re
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'user_obs'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'local_llm'))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import BASE_DOCS_DIR
 
 def parse_quiz_md(quiz_path):
     """Parse quiz markdown file into a list of (question, options, answer) tuples."""
     with open(quiz_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    # Find all questions using regex: number dot space, then options, then answer
+    # Updated regex: allow optional closing parenthesis after answer letter
     pattern = re.compile(
-        r'(\d+)\.\s*(.*?)\nA\)\s*(.*?)\nB\)\s*(.*?)\nC\)\s*(.*?)\nD\)\s*(.*?)\nAnswer:\s*([A-D])\)',
+        r'(\d+)\.\s*(.*?)\nA\)\s*(.*?)\nB\)\s*(.*?)\nC\)\s*(.*?)\nD\)\s*(.*?)\nAnswer:\s*([A-D])\)?',
         re.DOTALL
     )
     parsed = []
@@ -64,18 +69,12 @@ def run_quiz(quiz_files, username="default_user"):
 
 def main():
     course_code = input("Enter course code: ").strip()
-    orig_file = input("Enter original file name: ").strip()
-    username = input("Enter your username (for analysis): ").strip() or "default_user"
-    quiz_dir = os.path.join("..", "Docs", course_code, f"{course_code}_quizzes", orig_file)
-    if not os.path.exists(quiz_dir):
-        print(f"Quiz directory not found: {quiz_dir}")
+    name = input("Enter your name: ").strip() or "default_user"
+    quiz_path = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md", "general_quiz.md")
+    if not os.path.exists(quiz_path):
+        print(f"Quiz file not found: {quiz_path}")
         return
-    quiz_files = [os.path.join(quiz_dir, f) for f in os.listdir(quiz_dir) if f.endswith('.md')]
-    if not quiz_files:
-        print("No quiz files found.")
-        return
-    quiz_files.sort()
-    run_quiz(quiz_files, username=username)
+    run_quiz([quiz_path], username=name)
 
 if __name__ == "__main__":
     main()

@@ -45,6 +45,42 @@ def process_chunks_for_quiz(course_code, chunk_dir, quiz_dir):
             sf.write(quiz)
     return len(chunk_files)
 
+def generate_general_quiz(course_code, chunks_base):
+    """
+    Combine all chunk texts from all subfolders in <course_code>_chunks and generate a general quiz.
+    """
+    all_chunk_texts = []
+    for chunked_file in os.listdir(chunks_base):
+        chunk_dir = os.path.join(chunks_base, chunked_file)
+        if not os.path.isdir(chunk_dir):
+            continue
+        chunk_files = [f for f in os.listdir(chunk_dir) if f.lower().endswith('.txt')]
+        for chunk_file in chunk_files:
+            chunk_path = os.path.join(chunk_dir, chunk_file)
+            with open(chunk_path, 'r', encoding='utf-8') as cf:
+                all_chunk_texts.append(cf.read())
+    if not all_chunk_texts:
+        logging.warning("No chunk texts found for general quiz.")
+        return
+    # If the combined text is too large, consider truncating or sampling
+    combined_text = '\n\n'.join(all_chunk_texts)
+    # Optionally, limit the size to avoid API limits (e.g., 12000 chars)
+    max_length = 12000
+    if len(combined_text) > max_length:
+        combined_text = combined_text[:max_length]
+        logging.info(f"Combined chunk text truncated to {max_length} characters for general quiz.")
+    general_quiz = generate_quiz(combined_text)
+    if general_quiz is None:
+        logging.error("Failed to generate general quiz for the course.")
+        return
+    # Save the general quiz
+    md_base = os.path.join(BASE_DOCS_DIR, course_code, f"{course_code}_md")
+    os.makedirs(md_base, exist_ok=True)
+    quiz_path = os.path.join(md_base, "general_quiz.md")
+    with open(quiz_path, 'w', encoding='utf-8') as f:
+        f.write(general_quiz)
+    logging.info(f"General quiz saved to {quiz_path}")
+
 def main(course_code=None):
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     if course_code is None:
@@ -62,6 +98,8 @@ def main(course_code=None):
         total_files += 1
         total_chunks += num_chunks
         logging.info(f"{chunked_file}: Quizzes generated for {num_chunks} chunks.")
+    # Generate general quiz for the whole course
+    generate_general_quiz(course_code, chunks_base)
     logging.info(f"\nAll done. {total_files} files processed, {total_chunks} quizzes generated.")
 
 if __name__ == "__main__":
